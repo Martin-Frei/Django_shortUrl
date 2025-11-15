@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th { background: #f8f9fa; }
+        
+        .url-cell {
+            max-width: 300px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        
+        .new-url {
+            background: #d4edda;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Shortener</h1>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <input placeholder="https://example.com" name="longUrl">
+            <button type="submit">Shorten URL</button>
+        </form>
+        
+        {% if newShortUrl %}
+            <div class="new-url">
+                Short Code: <strong>{{ newShortUrl }}</strong>
+            </div>
+        {% endif %}
+        
+        <h3>All URLs:</h3>
+        {% if all_urls %}
+            <table>
+                <tr>
+                    <th>Code</th>
+                    <th>Original URL</th>
+                </tr>
+                {% for url in all_urls %}
+                <tr>
+                    <td><strong>{{ url.shortUrlField }}</strong></td>
+                    <td class="url-cell">{{ url.longUrl }}</td>
+                    <td><a href="/{{ url.shortUrlField }}/" target="_blank">127.0.0.1:8000/{{ url.shortUrlField }}/</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No URLs yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
